@@ -28,6 +28,15 @@ Markitdown API 是一个用于文档的 API 服务。它提供了一系列功能
     uvicorn main:app --reload
    ```
 
+### Docker 运行
+
+```shell
+docker build -t forcemeter/markitdown-api .
+
+
+docker run --name markitdown-api -d -p 8000:8000 forcemeter/markitdown-api
+```
+
 ### 提交任务
 
 
@@ -62,6 +71,6 @@ curl -X POST http://127.0.0.1:8000/convert/url/ -H "Content-Type: application/js
 
 ```json
 {
-   "detail": "错误信息",
+   "detail": "错误信息"
 }
 ```

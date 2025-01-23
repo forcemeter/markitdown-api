@@ -2,7 +2,9 @@ from fastapi import FastAPI, UploadFile, File, HTTPException
 from markitdown import MarkItDown
 from pydantic import BaseModel
 import shutil
-import os, hashlib, logging
+import os
+import hashlib
+import logging
 import requests
 import traceback
 
@@ -23,6 +25,7 @@ class MarkdownResponse(BaseModel):
     code: int
     filename: str
     markdown: str
+    detail: str
 
 
 class URLRequest(BaseModel):
@@ -48,7 +51,7 @@ def markdown(filename: str):
     if result:
         text = result.text_content
 
-    return {"code": 200, "filename": filename, "markdown": text}
+    return {"code": 200, "filename": filename, "markdown": text, "detail": "success"}
 
 
 @app.post("/convert/file/", response_model=MarkdownResponse)
@@ -67,7 +70,6 @@ async def convert_file(file: UploadFile = File(...)):
 
     except Exception as e:
         logging.error(f"File conversion error: {str(e)}\n{traceback.format_exc()}")
-
         raise HTTPException(status_code=500, detail=str(e))
 
     finally:
@@ -86,7 +88,6 @@ async def convert_uri(request: URLRequest):
     - force_download: bool
       如果为 True，则强制重新下载文件，即使文件已经存在。
     """
-
     url = request.url
     try:
         # 如果文件存在则直接读取
@@ -99,10 +100,12 @@ async def convert_uri(request: URLRequest):
             raise HTTPException(status_code=400, detail="Invalid URL. Must start with http:// or https://")
 
         # 下载链接到本地，以链接 md5hash 作为文件名
-        temp_file = "tmp/"+hashlib.md5(url.encode("utf-8")).hexdigest()
+        temp_file = "tmp/" + hashlib.md5(url.encode("utf-8")).hexdigest()
         if not os.path.exists(temp_file) or request.force_download:
             logging.info(f"Download {url} to {temp_file}")
-            header = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36"}
+            header = {
+                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36"
+            }
             with requests.get(url, headers=header, stream=True) as r:
                 r.raise_for_status()
                 with open(temp_file, "wb") as f:
