@@ -30,28 +30,27 @@ Markitdown API 是一个用于文档的 API 服务。它提供了一系列功能
 
 ### Docker 运行
 
-```shell
-docker build -t forcemeter/markitdown-api .
-
-
-docker run --name markitdown-api -d -p 8000:8000 forcemeter/markitdown-api
-```
+   ```bash
+   docker build -t forcemeter/markitdown-api .
+   docker run --name markitdown-api -d -p 8000:8000 forcemeter/markitdown-api
+   ```
 
 ### 提交任务
 
 
 1. 文件
 
-```bash
-curl -X POST http://127.0.0.1:8000/convert/url/ -H "Content-Type: application/json" -d '{"url": "tests/docx"}'
-```
+   ```bash
+   curl -X POST http://127.0.0.1:8000/convert/url/ -H "Content-Type: application/json" -d '{"url": "tests/docx"}'
+   ```
 
 
 2. 链接
 
-```bash
-curl -X POST http://127.0.0.1:8000/convert/url/ -H "Content-Type: application/json" -d '{"url": "https://www.beijing.gov.cn/zhengce/zhengcefagui/202402/W020240226346416011070.pdf"}'
-```
+   ```bash
+   curl -X POST http://127.0.0.1:8000/convert/url/ -H "Content-Type: application/json" \
+   -d '{"url": "https://www.beijing.gov.cn/zhengce/zhengcefagui/202402/W020240226346416011070.pdf"}'
+   ```
 
 
 ### 响应
