@@ -120,3 +120,8 @@ async def convert_uri(request: URLRequest):
         raise HTTPException(status_code=500, detail=f"Internal server error: {str(e)}")
     finally:
         logging.info(f"Converted {url} to Markdown")
+
+
+@app.get("/")
+async def monitor():
+    return {"status": "ok"}
