@@ -1,0 +1,1 @@
+curl -X POST http://127.0.0.1:8000/convert/url/ -H "Content-Type: application/json" -d '{"url": "https://www.cma.gov.cn/zfxxgk/gknb/2024n/202501/P020250116336004371749.pdf"}'
